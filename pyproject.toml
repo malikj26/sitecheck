@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sitecheck"
+version = "0.1.0"
+description = "A Docker-friendly CLI tool for bulk website reachability checks and httpx enrichment."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.31.0"
+]
+
+[project.scripts]
+sitecheck = "sitecheck.cli:main"
