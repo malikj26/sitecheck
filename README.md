@@ -1,5 +1,5 @@
 # Sitecheck
-Tool meant to analyze a bulk set of websites for general analysis by accepting a .csv input with websites.
+Tool dedicated to analyzing a bulk set of websites for general analysis by accepting a .csv input with websites.
 
 # Input Format
 Your CSV file should contain a column of websites.
