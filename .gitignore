@@ -6,3 +6,4 @@ __pycache__/
 sitecheck_results.csv
 reachable_sites.csv
 results.csv
+saved_sites.csv

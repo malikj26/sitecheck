@@ -192,10 +192,17 @@ def main():
     )
 
     parser.add_argument("--input", required=True, help="Path to input CSV file")
-    parser.add_argument("--column", default="url", help="CSV column name. Default: url")
+    parser.add_argument(
+        "--column",
+        default="url",
+        help="Name of the CSV column containing websites/domains. Default: url",
+    )
     parser.add_argument("--timeout", type=int, default=5, help="Request timeout in seconds")
     parser.add_argument("--httpx-path", default="httpx", help="Path to ProjectDiscovery httpx binary")
-    parser.add_argument("--output", default="sitecheck_results.csv", help="Output CSV path")
+    parser.add_argument(
+        "--output",
+        help="Optional output CSV path. If omitted, the user will be prompted.",
+    )
     parser.add_argument("--no-httpx", action="store_true", help="Skip httpx enrichment")
 
     args = parser.parse_args()
@@ -222,7 +229,36 @@ def main():
         print("[INFO] Running httpx enrichment...")
         results = enrich_with_httpx(successful_sites, args.httpx_path)
 
-    save_to_csv(results, args.output)
+    if args.output:
+        save_to_csv(results, args.output)
+        return
+
+    save_choice = input("Would you like to save the results to CSV? (y/n): ").strip().lower()
+
+    if save_choice in ("y", "yes"):
+        filename = input("Enter output filename (default: saved_sites.csv): ").strip()
+        output_path = resolve_output_path(filename)
+        save_to_csv(results, output_path)
+    else:
+        print("[INFO] Results were not saved.")
+
+
+def resolve_output_path(filename: str) -> str:
+
+    filename = filename.strip()
+
+    if not filename:
+        filename = "saved_sites.csv"
+
+    # If user provides a full/relative path, respect it
+    if os.path.dirname(filename):
+        return filename
+
+    # Docker mounted working directory
+    if os.path.isdir("/data"):
+        return os.path.join("/data", filename)
+
+    return filename
 
 
 if __name__ == "__main__":

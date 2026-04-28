@@ -7,3 +7,4 @@ __pycache__
 !examples/*.csv
 .DS_Store
 results.csv
+saved_sites.csv
